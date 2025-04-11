@@ -55,11 +55,12 @@ export const createTask = async (req: FastifyRequest, reply: FastifyReply) => {
     });
   }
 
-  const { title } = result.data;
+  const { title, userId } = result.data;
 
   const newTask = await prisma.task.create({
     data: {
       title,
+      userId,
     },
   });
 
