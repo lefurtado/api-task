@@ -14,11 +14,11 @@ export const getUsers = async (req: FastifyRequest, reply: FastifyReply) => {
     where: {
       deleted: false,
     },
-    omit: {
-      deleted: true,
-    },
   });
-  return reply.send(users);
+
+  const usersWithoutDeleted = users.map(({ deleted, ...user }) => user);
+
+  return reply.send(usersWithoutDeleted);
 };
 
 export const getUserById = async (req: FastifyRequest, reply: FastifyReply) => {
@@ -86,8 +86,9 @@ export const createUser = async (req: FastifyRequest, reply: FastifyReply) => {
       return reply.status(201).send(newUser);
     }
   } catch (err) {
-    return reply.status(404).send({
-      error: "Usuário não encontrado.",
+    return reply.status(500).send({
+      error: "Erro ao criar usuário.",
+      details: err,
     });
   }
 };

@@ -57,14 +57,31 @@ export const createTask = async (req: FastifyRequest, reply: FastifyReply) => {
 
   const { title, userId } = result.data;
 
-  const newTask = await prisma.task.create({
-    data: {
-      title,
-      userId,
-    },
-  });
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId, deleted: false },
+    });
 
-  return reply.status(201).send(newTask);
+    if (!user) {
+      return reply.status(404).send({
+        error: "Usuário não encontrado",
+      });
+    } else {
+      const newTask = await prisma.task.create({
+        data: {
+          title,
+          userId,
+        },
+      });
+
+      return reply.status(201).send(newTask);
+    }
+  } catch (err) {
+    return reply.status(500).send({
+      error: "Erro ao criar tarefa.",
+      details: err,
+    });
+  }
 };
 
 export const updateTask = async (req: FastifyRequest, reply: FastifyReply) => {
