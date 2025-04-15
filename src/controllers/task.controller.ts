@@ -1,6 +1,4 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { prisma } from "../lib/prisma";
-import { TaskResponseDTO } from "../dtos/task/TaskResponseDTO";
 import { IdParamsDTO } from "../dtos/shared/IdParamsDTO";
 import { CreateTaskDTO } from "../dtos/task/CreateTaskDTO";
 import { UpdateTaskDTO } from "../dtos/task/UpdateTaskDTO";
